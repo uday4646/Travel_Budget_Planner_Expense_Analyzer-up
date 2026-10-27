@@ -1,84 +1,127 @@
-Destination = input("Enter the Destination : ")
-Office_Budget = float(input("enter the Planned Budget : ")) 
-print("Planned Budget is : ", Office_Budget)  
+Destination = input("Enter the Destination : ").strip() 
 
-# Budget canot be zero or negitive 
-if Office_Budget <= 0 :
-    print("Error : Budget can not be zero or negative") 
-    exit()
-else :
-    print("Budget is Valid") 
+while not Destination:
+    print("Destination can not be empty") 
+    Destination = input("Enter the Destination : ").strip()  
 
-# Creating List of Categories 
+#Enter trip duration 
+while True:
+    try:
+        Trip_days = int(input("Enter the number of days for the trip: "))
 
-Categories = ["Travel", "Food", "Hotel", "Others"] 
-Estimated_Expenses = {} 
+        if Trip_days <= 0:
+            print("Trip duration must be greater than zero.")  
+        else :
+            break
+    except ValueError:
+        print("Enter a valid number.") 
 
-for Category in Categories : 
-    Amount = float(input("Enter the Estimated Expenses for " + Category + " : ")) 
-    if Amount < 0 :
-        print("Expenses can not be negative") 
+#Budget can not be zero or negative 
+while True:
+    try:
+        Office_Budget = float(input("Enter the Planned Budget : ")) 
 
-    Estimated_Expenses[Category] = Amount   
+        if Office_Budget <= 0:
+            print("Error: Budget can not be zero or negative") 
+        else:
+            break 
+    except ValueError:
+        print("Enter a valid number.") 
 
-# Calculating estamiting total and remaining budget 
-estimated_total = sum(Estimated_Expenses.values()) 
+#Creating List of Categories 
+categories = ["Travel", "Food", "Hotel", "Others"]
+estimated_expenses = {} 
+
+for category in categories:
+    while True:
+        try:
+            amount = float(input("Enter the Estimated Expenses for  " + category + " : "))  
+            if amount < 0:
+                print("Expenses can not be negative")
+            else:
+                estimated_expenses[category] = amount
+                break
+        except ValueError:
+            print("Enter a valid number.") 
+
+estimated_total = sum(estimated_expenses.values())
 remaining_budget = Office_Budget - estimated_total 
 
-#Printing the estimated totals 
 print("\n----Estimated Expenses Summary----") 
 print("Destination : ", Destination)
+print("number of days for the trip : ", Trip_days)
 print("Planned Budget : $ ", Office_Budget)
 print("Estimated Total : $ ", estimated_total)
-print("Remaining Budget : $ ", remaining_budget)
+print("Remaining Budget : $ ", remaining_budget)  
 
-#Adding budget warnings 
-if remaining_budget < 0 :
-    print("Warning : Estimated Expenses exceed the Planned Budget") 
-elif remaining_budget == 0 :
-    print("Estimated Expenses equal the Planned Budget") 
-else :
-    print("Estimated Expenses are within the Planned Budget") 
+if estimated_total > Office_Budget:
+    buffer_percentage = ((estimated_total - Office_Budget) / Office_Budget) * 100 
+    print(f"Remaining Buffer: {buffer_percentage:.1f}%") 
 
-#Highest budget category 
-highest_category = max(Estimated_Expenses, key=Estimated_Expenses.get) 
-highest_amount = Estimated_Expenses[highest_category] 
-print("Highest Budget Category : ", highest_category, "with amount $", highest_amount) 
+if remaining_budget < 0:
+    print("Warning : Estimated Expenses exceed the Planned Budget")
+elif remaining_budget == 0:
+    print("Estimated Expenses equal the Planned Budget")
+else:
+    print("Estimated Expenses are within the Planned Budget")
+
+
+if estimated_total > 0 :
+    highest_category = max(estimated_expenses, key=estimated_expenses.get) 
+    highest_amount = estimated_expenses[highest_category] 
+    highest_percentage = (highest_amount / estimated_total) * 100
+    print(f"Highest Budget Category : {highest_category} with amount ${highest_amount:.2f} ({highest_percentage:.1f}%)")
+else:
+    print("No estimated expenses were entered.") 
+
+print(f"estimated daily average: ${estimated_total / Trip_days:.2f}") 
 
 #Actual Expenses 
-Actual_Expenses = {}
-for Category in Categories :
-    Amount = float(input("Enter the Actual Expenses for " + Category + " : ")) 
-    if Amount < 0 :
-        print("Expenses can not be negative") 
+actual_expenses = {} 
+for category in categories:
+    while True:
+        try:
+            amount = float(input("Enter the Actual Expenses for " + category + " : "))  
+            if amount < 0:
+                print("Expenses can not be negative")
+            else:
+                actual_expenses[category] = amount
+                break 
+        except ValueError:
+            print("Enter a valid number.") 
 
-    Actual_Expenses[Category] = Amount 
-
-actual_total = sum(Actual_Expenses.values()) 
-difference = actual_total - estimated_total 
+#Calculating actual total and remaining budget
+actual_total = sum(actual_expenses.values())
+difference = actual_total - estimated_total
 final_remaining_budget = Office_Budget - actual_total 
 
-#printing the actual totals
-
 print("\n----Estimated vs Actual Expenses Comparison----") 
-for Category in Categories :
-    category_difference = Actual_Expenses[Category] - Estimated_Expenses[Category] 
+print(f"{'Category':<15}{'Estimated':<15}{'Actual':<15}{'Difference':<15}") 
 
-    print(f"{Category}:") 
-    print(f"  Estimated: ${Estimated_Expenses[Category]:.2f}") 
-    print(f"  Actual: ${Actual_Expenses[Category]:.2f}") 
-    print(f"  Difference: ${category_difference:.2f}")  
+print("-" * 60) 
 
-#final Wanrings based on actual expenses 
-print(f"\nActual Total : ${actual_total:.2f}") 
-print(f"difference between Actual and Estimated Total : ${difference:.2f}") 
-print(f"Final Budget Balance : ${final_remaining_budget:.2f}") 
+for category in categories:
+    estimated = estimated_expenses[category] 
+    actual = actual_expenses[category]
+    category_difference = actual - estimated
+    print(f"{category:<15}${estimated:<14.2f}${actual:<14.2f}${category_difference:<14.2f}") 
 
-if final_remaining_budget > 0 :
-    print("Trip spending is within the planned budget.") 
-elif final_remaining_budget == 0 :
-    print("Trip spending is exactly equal to the planned budget.") 
-else :
-    print("Warning: Trip spending exceeds the planned budget.")  
+print("-" * 60) 
+print(f"{'Total':<15}${estimated_total:<14.2f}${actual_total:<14.2f}${difference:<14.2f}") 
 
-print("\n----End of Budget Report----")
+#final acutal expenses summary 
+print("\n----Actual Expenses Summary----") 
+print(f"Actual Total : ${actual_total:.2f}")
+print(f"Difference between Actual and Estimated Total : ${difference:.2f}")
+print(f"Final Budget Balance : ${final_remaining_budget:.2f}")
+print(f"actual daily average: ${actual_total / Trip_days:.2f}") 
+
+#final budget warnings based on actual expenses
+if final_remaining_budget > 0:
+    print("Trip spending is within the planned budget.")
+elif final_remaining_budget == 0:
+    print("Trip spending is exactly equal to the planned budget.")
+else:
+    print("Warning: Trip spending exceeds the planned budget.") 
+
+print("\n-----End of Budget Summary-----")
