@@ -1,5 +1,5 @@
 
-# Travel Budget Planner
+# Travel Budget Planner and Expense Analyzer 
 
 ## Project Overview
 The Travel Budget Planner is a Python program that helps users
@@ -48,8 +48,7 @@ No external packages are required.
 - Variance = Actual Total - Estimated Total.
 - Remaining Budget = Planned Budget - Actual Total.
 - Daily Average = Total Expenses / Trip Duration.
-- Largest Category Percentage = Largest Category Amount /
-  Total Expenses * 100.
+- Largest Category Percentage = Largest Category Amount /Total Expenses * 100.
 
 ## Input Validation
 - Destination cannot be empty.
