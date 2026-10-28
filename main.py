@@ -2,7 +2,7 @@ Destination = input("Enter the Destination : ").strip()
 
 while not Destination:
     print("Destination can not be empty") 
-    Destination = input("Enter the Destination : ").strip()  
+    Destination = input("Enter the Destination : ").strip()      
 
 #Enter trip duration 
 while True:
@@ -124,4 +124,4 @@ elif final_remaining_budget == 0:
 else:
     print("Warning: Trip spending exceeds the planned budget.") 
 
-print("\n-----End of Budget Summary-----")
+print("\n-----End of Budget Summary-----")  
